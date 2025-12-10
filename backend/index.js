@@ -6,6 +6,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+//Manejo de todas las llamadas a la api
+
 // consulta a tipos
 app.get("/api/tipos", async (req, res) => {
     try {
@@ -18,7 +20,7 @@ app.get("/api/tipos", async (req, res) => {
     }
 });
 
-// consulta a productos con su tipo
+// listar todos
 app.get("/api/productos", async (req, res) => {
     try {
         const pool = await sql.connect(config);
@@ -35,7 +37,7 @@ app.get("/api/productos", async (req, res) => {
     }
 });
 
-// obtener id producto
+// obtener producto por id (incluye infor de tipo)
 app.get("/api/productos/:id", async (req, res) => {
     try {
         const id = req.params.id;
