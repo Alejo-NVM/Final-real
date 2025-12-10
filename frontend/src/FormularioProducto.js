@@ -22,12 +22,14 @@ function FormularioProducto({ abierto, cerrar, tipos, producto, refrescar }) {
     }
   }, [producto, tipos]);
 
-  async function guardar() {
+  async function guardar(e) {
+    e.preventDefault(); // CLAVE: evitamos que el form recargue la página
+
     try {
       const body = {
         nombre,
         precio,
-        tipos_id: tipo
+        tipos_id: tipo,
       };
 
       if (producto) {
@@ -40,8 +42,21 @@ function FormularioProducto({ abierto, cerrar, tipos, producto, refrescar }) {
 
       cerrar();
       refrescar();
-    } catch {
-      toast.error("Error al guardar");
+    } catch (error) {
+        if (error.response) {
+          const data = error.response.data;
+
+          if (error.response.status === 422 && Array.isArray(data.errores)) {
+            data.errores.forEach(err => toast.error(err));
+            return;
+          }
+
+          if (data.mensaje) {
+            toast.error(data.mensaje);
+            return;
+          }
+        }
+        toast.error("Error al guardar");
     }
   }
 
@@ -49,37 +64,60 @@ function FormularioProducto({ abierto, cerrar, tipos, producto, refrescar }) {
     <Modal
       isOpen={abierto}
       onRequestClose={cerrar}
-      className="modal-dialog modal-dialog-centered"
-      overlayClassName="modal-backdrop show d-block"
+      overlayClassName="modal-fondo"
+      className="modal-contenido"
     >
-      <div className="modal-content p-3">
-        <h4>{producto ? "Editar Producto" : "Nuevo Producto"}</h4>
+      <h4>{producto ? "Editar Producto" : "Nuevo Producto"}</h4>
 
+      <form onSubmit={guardar}>
         <div className="mb-2">
           <label>Nombre</label>
-          <input className="form-control" value={nombre} onChange={e => setNombre(e.target.value)} />
+          <input
+            className="form-control"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+          />
         </div>
 
         <div className="mb-2">
           <label>Precio</label>
-          <input className="form-control" type="number" value={precio} onChange={e => setPrecio(e.target.value)} />
+          <input
+            className="form-control"
+            type="number"
+            value={precio}
+            onChange={(e) => setPrecio(e.target.value)}
+          />
         </div>
 
         <div className="mb-3">
           <label>Tipo</label>
-          <select className="form-control" value={tipo} onChange={e => setTipo(e.target.value)}>
-            {tipos.map(t => (
-              <option key={t.id} value={t.id}>{t.nombre}</option>
+          <select
+            className="form-control"
+            value={tipo}
+            onChange={(e) => setTipo(e.target.value)}
+          >
+            {tipos.map((t) => (
+              <option key={t.id} value={t.id}>
+                {t.nombre}
+              </option>
             ))}
           </select>
         </div>
 
         <div className="text-end">
-          <button className="btn btn-secondary me-2" onClick={cerrar}>Cancelar</button>
-          <button className="btn btn-success" onClick={guardar}>Guardar</button>
-        </div>
+          <button
+            type="button"
+            className="btn btn-secondary me-2"
+            onClick={cerrar}
+          >
+            Cancelar
+          </button>
 
-      </div>
+          <button type="submit" className="btn btn-success">
+            Guardar
+          </button>
+        </div>
+      </form>
     </Modal>
   );
 }

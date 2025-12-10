@@ -68,8 +68,14 @@ app.post("/api/productos", async (req, res) => {
     try {
         const { nombre, precio, tipos_id } = req.body;
 
-        if (!nombre || precio <= 0 || !tipos_id) {
-            return res.status(422).json({ mensaje: "Datos inválidos" });
+        let errores = [];
+
+        if (!nombre || nombre.trim() === "") errores.push("El nombre no puede estar vacío");
+        if (precio === undefined || precio === null || precio <= 0) errores.push("El precio debe ser mayor a 0");
+        if (!tipos_id) errores.push("Debe seleccionar un tipo válido");
+
+        if (errores.length > 0) {
+            return res.status(422).json({ errores });
         }
 
         const pool = await sql.connect(config);
@@ -98,10 +104,15 @@ app.put("/api/productos/:id", async (req, res) => {
         const id = req.params.id;
         const { nombre, precio, tipos_id } = req.body;
 
-        if (!nombre || precio <= 0 || !tipos_id) {
-            return res.status(422).json({ mensaje: "Datos inválidos" });
-        }
+       let errores = [];
 
+        if (!nombre || nombre.trim() === "") errores.push("El nombre no puede estar vacío");
+        if (precio === undefined || precio === null || precio <= 0) errores.push("El precio debe ser mayor a 0");
+        if (!tipos_id) errores.push("Debe seleccionar un tipo válido");
+
+        if (errores.length > 0) {
+            return res.status(422).json({ errores });
+        }
         const pool = await sql.connect(config);
 
         await pool.request()
