@@ -65,18 +65,18 @@ const [idAEliminar, setIdAEliminar] = useState(null);
   setIdAEliminar(id);
   setModalConfirmOpen(true);
 }
-async function confirmarEliminacion() {
-  try {
-    await api.delete(`/productos/${idAEliminar}`);
-    toast.success("Producto eliminado");
-    cargarDatos();
-  } catch {
-    toast.error("Error al eliminar");
-  } finally {
-    setModalConfirmOpen(false);
-    setIdAEliminar(null);
+  async function confirmarEliminacion() {
+    try {
+      await api.delete(`/productos/${idAEliminar}`);
+      toast.success("Producto eliminado");
+      cargarDatos();
+    } catch {
+      toast.error("Error al eliminar");
+    } finally {
+      setModalConfirmOpen(false);
+      setIdAEliminar(null);
+    }
   }
-}
 
 
   return (
@@ -109,30 +109,30 @@ async function confirmarEliminacion() {
         refrescar={cargarDatos}
       />
       <Modal
-  isOpen={modalConfirmOpen}
-  onRequestClose={() => setModalConfirmOpen(false)}
-  overlayClassName="modal-fondo"
-  className="modal-contenido"
->
-  <h4>Confirmar eliminación</h4>
-  <p>¿Estás seguro de que querés eliminar este producto?</p>
+        isOpen={modalConfirmOpen}
+        onRequestClose={() => setModalConfirmOpen(false)}
+        overlayClassName="modal-fondo"
+        className="modal-contenido"
+      >
+        <h4>Confirmar eliminación</h4>
+        <p>¿Estás seguro de que querés eliminar este producto?</p>
 
-  <div className="text-end mt-3">
-    <button
-      className="btn btn-secondary me-2"
-      onClick={() => setModalConfirmOpen(false)}
-    >
-      Cancelar
-    </button>
+        <div className="text-end mt-3">
+          <button
+            className="btn btn-secondary me-2"
+            onClick={() => setModalConfirmOpen(false)}
+          >
+            Cancelar
+          </button>
 
-    <button
-      className="btn btn-danger"
-      onClick={confirmarEliminacion}
-    >
-      Eliminar
-    </button>
-  </div>
-</Modal>
+          <button
+            className="btn btn-danger"
+            onClick={confirmarEliminacion}
+          >
+            Eliminar
+          </button>
+        </div>
+      </Modal>
 
     </div>
     </>
