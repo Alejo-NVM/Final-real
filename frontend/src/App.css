@@ -22,7 +22,7 @@ h1 {
   font-size: 1.9rem;
   font-weight: 600;
   letter-spacing: 0.04em;
-  color: #e0f2fe;
+  color: #ffffff !important;
   text-transform: uppercase;
   margin-bottom: 1.5rem;
   display: inline-flex;
@@ -209,4 +209,23 @@ h1::after {
 
 .Toastify__toast--error {
   background: linear-gradient(135deg, #ef4444, #b91c1c) !important;
+}
+
+.btn-refresh {
+  background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+  border: none;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  padding-inline: 18px;
+  color: #0f172a;
+  box-shadow: 0 10px 25px rgba(14,165,233,0.35);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
+}
+
+.btn-refresh:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+  box-shadow: 0 14px 30px rgba(56,189,248,0.45);
 }
